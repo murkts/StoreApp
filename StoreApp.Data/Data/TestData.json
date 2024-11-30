@@ -1,0 +1,36 @@
+{
+  "Stores": [
+    {
+      "Id": "b1f2c4e2-9980-4c4c-8edc-45eecb89f95b",
+      "Name": "Store A",
+      "Address": "123 Main St"
+    },
+    {
+      "Id": "a2f3c5f3-2234-4d4c-9bcc-99eefc19f98b",
+      "Name": "Store B",
+      "Address": "456 Elm St"
+    }
+  ],
+  "Products": [
+    {
+      "Name": "Apple"
+    },
+    {
+      "Name": "Banana"
+    }
+  ],
+  "StoreProducts": [
+    {
+      "StoreId": "b1f2c4e2-9980-4c4c-8edc-45eecb89f95b",
+      "ProductName": "Apple",
+      "Quantity": 50,
+      "Price": 1.5
+    },
+    {
+      "StoreId": "a2f3c5f3-2234-4d4c-9bcc-99eefc19f98b",
+      "ProductName": "Apple",
+      "Quantity": 30,
+      "Price": 1.3
+    }
+  ]
+}

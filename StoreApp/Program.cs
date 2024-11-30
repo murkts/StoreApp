@@ -1,37 +1,28 @@
-using System;
-using System.Windows.Forms;
+using Microsoft.Extensions.DependencyInjection;
+using StoreApp.DAL;
 using StoreApp.DAL.File;
 using StoreApp.DAL.Interfaces;
+using StoreApp.BLL.Interfaces;
+using StoreApp.BLL.Services;
 
-namespace StoreApp
+var serviceProvider = new ServiceCollection()
+    // Add JsonDataProvider with file path
+    .AddSingleton(new JsonDataProvider("Data/TestData.json"))
+    // BLL services
+    .AddTransient<IStoreService, StoreService>()
+    .AddTransient<IProductService, ProductService>()
+    .AddTransient<IStoreProductService, StoreProductService>()
+    // DAL file repositories
+    .AddTransient<IStoreRepository, FileStoreRepository>()
+    .AddTransient<IProductRepository, FileProductRepository>()
+    .AddTransient<IStoreProductRepository, FileStoreProductRepository>()
+    .BuildServiceProvider();
+
+var storeService = serviceProvider.GetRequiredService<IStoreService>();
+
+// Test load stores
+var stores = await storeService.GetAllStoresAsync();
+foreach (var store in stores)
 {
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            IStoreRepository storeRepo;
-            IProductRepository productRepo;
-            IStoreProductRepository storeProductRepo;
-
-            if (Config.RepositoryImplementation == "File")
-            {
-                storeRepo = new FileStoreRepository(Config.StoresFilePath);
-                productRepo = new FileProductRepository(Config.ProductsFilePath);
-                storeProductRepo = new FileStoreProductRepository(Config.StoreProductsFilePath);
-            }
-            else if (Config.RepositoryImplementation == "Database")
-            {
-                throw new NotImplementedException("Database repository not implemented yet.");
-            }
-            else
-            {
-                throw new InvalidOperationException("Invalid RepositoryImplementation in appsettings.json");
-            }
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(storeRepo, productRepo, storeProductRepo));
-        }
-    }
+    Console.WriteLine($"Store: {store.Name}, Address: {store.Address}");
 }
